@@ -7,7 +7,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import com.allasassis.bank.entities.Account;
 import com.allasassis.bank.entities.Customer;
+import com.allasassis.bank.repositories.AccountRepository;
 import com.allasassis.bank.repositories.CustomerRepository;
 
 @Configuration
@@ -16,6 +18,9 @@ public class TestConfig implements CommandLineRunner{
 
 	@Autowired
 	private CustomerRepository customerRepository;
+	
+	@Autowired
+	private AccountRepository accountRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -25,6 +30,10 @@ public class TestConfig implements CommandLineRunner{
 		Customer user2 = new Customer(null, "Sofia", "Lawyer", "812.321.451-23");
 		customerRepository.saveAll(Arrays.asList(user, user1, user2));		
 		
+		Account acc = new Account(null, 6783, "Personal", user);
+		Account acc1 = new Account(null, 6761, "Real", user1);
+		Account acc2 = new Account(null, 6724, "Personal", user2);
+		accountRepository.saveAll(Arrays.asList(acc, acc1, acc2));
 	}
 	
 	
