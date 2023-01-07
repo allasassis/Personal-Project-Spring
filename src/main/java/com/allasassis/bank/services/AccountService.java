@@ -9,7 +9,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.allasassis.bank.entities.Account;
-import com.allasassis.bank.entities.Customer;
 import com.allasassis.bank.repositories.AccountRepository;
 import com.allasassis.bank.services.exceptions.DatabaseException;
 import com.allasassis.bank.services.exceptions.ResourceNotFoundException;
@@ -59,4 +58,42 @@ public class AccountService {
 		entity.setNumber(obj.getNumber());
 		entity.setType(obj.getType());
 	}
+	
+	public Account deposit(Account acc, Double value) {
+		try {
+			acc.deposit(value);
+			return repository.save(acc);
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(acc.getId());
+		}
+		
+	}
+	
+	public Account withdraw(Account acc, Double value) {
+		try {
+			acc.withdraw(value);
+			return repository.save(acc);
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(acc.getId());
+		}
+		
+	}
+	
+	public Account transfer(Account acc, Account acc1, Double value) {
+		try {
+			if (acc.getBalance() > value) {
+				acc.withdraw(value);
+				acc1.deposit(value);
+				repository.save(acc);
+				repository.save(acc1);
+				return acc;
+			} else {
+				System.out.println("You don't have enough money!");
+				return acc;
+			}
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(acc.getId());
+		}
+	}
+	
 }

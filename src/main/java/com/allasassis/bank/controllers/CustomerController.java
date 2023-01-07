@@ -22,9 +22,6 @@ import com.allasassis.bank.services.CustomerService;
 @RestController
 @RequestMapping(value = "/customers")
 public class CustomerController {
-
-	@Autowired
-	private CustomerRepository customerRepository;
 	
 	@Autowired
 	private CustomerService customerService;
@@ -35,7 +32,7 @@ public class CustomerController {
 		return ResponseEntity.ok().body(list);
 	}
 	
-	@GetMapping(value = "/{id}")
+	@GetMapping(value = "/{id}/{value}")
 	public ResponseEntity<Customer> findById(@PathVariable Long id) {
 		Customer customer = customerService.findById(id);
 		return ResponseEntity.ok().body(customer);

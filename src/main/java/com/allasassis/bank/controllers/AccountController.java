@@ -16,16 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.allasassis.bank.entities.Account;
-import com.allasassis.bank.entities.Customer;
-import com.allasassis.bank.repositories.AccountRepository;
 import com.allasassis.bank.services.AccountService;
 
 @RestController
 @RequestMapping(value = "/accounts")
 public class AccountController {
-
-	@Autowired
-	private AccountRepository repository;
 	
 	@Autowired
 	private AccountService service;
@@ -59,5 +54,28 @@ public class AccountController {
 	public ResponseEntity<Account> update(@PathVariable Long id, @RequestBody Account obj) {
 		service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
+	}
+	
+	
+	@PutMapping(value = "/deposit/{id}/{value}")
+	 public ResponseEntity<Account> deposit(@PathVariable Long id, @PathVariable Double value) {
+		Account x = service.findById(id);
+		service.deposit(x, value);
+		return ResponseEntity.ok().body(x);
+	}
+	
+	@PutMapping(value = "/withdraw/{id}/{value}")
+	 public ResponseEntity<Account> withdraw(@PathVariable Long id, @PathVariable Double value) {
+		Account x = service.findById(id);
+		service.withdraw(x, value);
+		return ResponseEntity.ok().body(x);
+	}
+	
+	@PutMapping(value = "/transfer/{id}/{id1}/{value}")
+	public ResponseEntity<Account> transfer(@PathVariable Long id, @PathVariable Long id1, @PathVariable Double value) {
+		Account acc1 = service.findById(id);
+		Account acc2 = service.findById(id1);
+		Account acc = service.transfer(acc1, acc2, value);
+		return ResponseEntity.ok().body(acc);
 	}
 }

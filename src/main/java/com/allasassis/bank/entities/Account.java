@@ -22,7 +22,7 @@ public class Account implements Serializable{
 	
 	private Integer number;
 	private String type;
-	// private Double balance;
+	private double balance;
 	
 	@OneToOne
 	@JoinColumn(name = "customer_id")
@@ -32,12 +32,13 @@ public class Account implements Serializable{
 		
 	}
 	
-	public Account(Long id, Integer number, String type, Customer customer) {
+	public Account(Long id, Integer number, String type, Customer customer, double balance) {
 		super();
 		this.id = id;
 		this.number = number;
 		this.type = type;
 		this.customer = customer;
+		this.balance = balance;
 	}
 
 	public Long getId() {
@@ -64,17 +65,19 @@ public class Account implements Serializable{
 		this.type = type;
 	}
 
-	/* public Double getBalance() {
+	 public Double getBalance() {
 		return balance;
+	}
+
+	public void deposit(Double value) {
+		this.balance += value;
 	}
 	
 	public void withdraw(Double value) {
-		this.balance = this.balance - value;
-		System.out.println("Successful! Your balance now is: $ " + String.format("%.2f", getBalance())); 
+		if (value > this.balance) {
+			System.out.println("You don't have enough money for this withdraw!");
+		} else {
+			this.balance -= value;
+		}
 	}
-	
-	public void deposit(Double value) {
-		this.balance = this.balance - value;
-		System.out.println("Successful! Your balance now is: $ " + String.format("%.2f", getBalance())); 
-	} */
 }
