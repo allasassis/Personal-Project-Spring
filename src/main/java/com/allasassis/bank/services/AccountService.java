@@ -9,6 +9,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.allasassis.bank.entities.Account;
+import com.allasassis.bank.entities.exceptions.NotFundsEnoughException;
 import com.allasassis.bank.repositories.AccountRepository;
 import com.allasassis.bank.services.exceptions.DatabaseException;
 import com.allasassis.bank.services.exceptions.ResourceNotFoundException;
@@ -81,15 +82,14 @@ public class AccountService {
 	
 	public Account transfer(Account acc, Account acc1, Double value) {
 		try {
-			if (acc.getBalance() > value) {
+			if (acc.getBalance() >= value) {
 				acc.withdraw(value);
 				acc1.deposit(value);
 				repository.save(acc);
 				repository.save(acc1);
 				return acc;
 			} else {
-				System.out.println("You don't have enough money!");
-				return acc;
+				throw new NotFundsEnoughException();
 			}
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException(acc.getId());

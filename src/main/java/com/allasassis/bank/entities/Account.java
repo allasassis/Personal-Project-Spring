@@ -2,6 +2,8 @@ package com.allasassis.bank.entities;
 
 import java.io.Serializable;
 
+import com.allasassis.bank.entities.exceptions.NotFundsEnoughException;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -74,8 +76,8 @@ public class Account implements Serializable{
 	}
 	
 	public void withdraw(Double value) {
-		if (value > this.balance) {
-			System.out.println("You don't have enough money for this withdraw!");
+		if (value >= this.balance) {
+			throw new NotFundsEnoughException();
 		} else {
 			this.balance -= value;
 		}
